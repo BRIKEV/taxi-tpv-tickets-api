@@ -1,4 +1,4 @@
-const expressSwaggerGenerator = require('express-swagger-generator');
+const validator = require('swagger-endpoint-validator');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
@@ -6,19 +6,13 @@ const fileUpload = require('express-fileupload');
 module.exports = () => {
 	const start = async ({ manifest = {}, app, config }) => {
 		const { swaggerOptions } = config;
-		const expressSwagger = expressSwaggerGenerator(app);
-		const options = {
-			swaggerDefinition: {
-				...swaggerOptions.swaggerDefinition,
-			},
-			basedir: __dirname,
-			files: ['./**/**-routes.js'],
-		};
-		expressSwagger(options);
+
 		app.use(cors());
 		app.use(bodyParser.urlencoded({ extended: true }));
 		app.use(bodyParser.json());
 		app.use(fileUpload());
+
+		validator.init(app, swaggerOptions);
 
 		/**
 		 * This endpoint serves the manifest

@@ -9,9 +9,10 @@
 /**
  * @typedef TicketsResponse
  * @property {string} formattedDate.required
- * @property {string} date.required
+ * @property {object} date.required
  * @property {string} hour.required
  * @property {string} price.required
+ * @property {string} pdfName.required
  * @property {boolean} validated
  */
 

@@ -1,3 +1,4 @@
+const validator = require('swagger-endpoint-validator');
 const {
 	handleHttpError,
 	tagError,
@@ -31,7 +32,9 @@ module.exports = () => {
 			try {
 				const { file } = req.files;
 				const processedInfo = await controller.savePDFInfo(file);
-				return res.json({ success: true, processedInfo });
+				const response = { success: true, processedInfo };
+				validator.validateAPIOutput(response, req);
+				return res.json(response);
 			} catch (error) {
 				return next(tagError(error));
 			}
@@ -48,6 +51,7 @@ module.exports = () => {
 		app.get('/api/v1/tickets', authMiddleware, async (req, res, next) => {
 			try {
 				const tickets = await controller.getTickets();
+				validator.validateAPIOutput(tickets, req);
 				return res.json(tickets);
 			} catch (error) {
 				return next(tagError(error));

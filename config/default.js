@@ -32,6 +32,12 @@ module.exports = {
 						},
 					},
 				},
+				basedir: process.cwd(), // app absolute path
+				files: ['./**/**-routes.js'], // path to the API handle folder, related to basedir
+				route: {
+					url: '/api-docs',
+					docs: '/api-docs.json',
+				},
 			},
 		},
 	},
