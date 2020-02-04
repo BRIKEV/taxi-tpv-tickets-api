@@ -53,7 +53,22 @@ module.exports = () => {
 
 		const registerTicket = async (date, price) => {
 			logger.info(`Registering ticket with date ${date} and price ${price}`);
-			return store.registerTicket(date, price);
+			const dbTicket = await store.getTicket({ formattedDate: date, price });
+			const ticketExists = !!dbTicket;
+			if (ticketExists) {
+				logger.info('Registering when exists');
+				return store.registerTicket(date, price);
+			}
+			const query = {
+				formattedDate: date,
+				price,
+				pdfName: config.registerPdfName,
+			};
+			logger.info('Registering when it is new ticket');
+			return store.upsertTickets(query, {
+				...query,
+				validated: false,
+			});
 		};
 
 		const login = async (email, password) => {

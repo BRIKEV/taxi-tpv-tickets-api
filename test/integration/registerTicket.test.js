@@ -12,8 +12,12 @@ describe('Register ticket', () => {
 
 	let ticket;
 	let usersCollection;
+	let appConfig;
 	before(async () => {
-		const { app, mongo, store } = await sys.start();
+		const {
+			app, mongo, store, config,
+		} = await sys.start();
+		appConfig = config;
 		request = supertest(app);
 		ticket = mongo.collection('tickets');
 		usersCollection = mongo.collection('users');
@@ -44,7 +48,17 @@ describe('Register ticket', () => {
 				date: '13-12-2019',
 				price: '9999,6',
 			})
-			.expect(404)));
+			.expect(200))
+		.then(async () => {
+			const result = await ticket.find({}).toArray();
+			expect(result).to.have.length(5);
+			const newTicket = await ticket.findOne({
+				formattedDate: '13-12-2019',
+				price: '9999,6',
+			});
+			expect(newTicket.validated).to.eql(false);
+			expect(newTicket.pdfName).to.eql(appConfig.controller.registerPdfName);
+		}));
 
 	it('should register a ticket after calling POST /api/v1/tickets', () => request
 		.post('/api/v1/tickets')
