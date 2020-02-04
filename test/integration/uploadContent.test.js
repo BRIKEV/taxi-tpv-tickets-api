@@ -13,12 +13,8 @@ describe('Upload endpoints', () => {
 	let ticket;
 	let jwt;
 	let usersCollection;
-	let appConfig;
 	before(async () => {
-		const {
-			app, mongo, store, config,
-		} = await sys.start();
-		appConfig = config;
+		const { app, mongo, store } = await sys.start();
 		request = supertest(app);
 		ticket = mongo.collection('tickets');
 		usersCollection = mongo.collection('users');
@@ -68,26 +64,25 @@ describe('Upload endpoints', () => {
 			.attach('file', path.join(__dirname, '..', 'fixtures', 'file-mock.txt'))
 			.expect(400)));
 
-	it('should return 200 and validate one ticket already registered', () => {
-		const ticketAlreadyRegistered = {
-			formattedDate: '13-12-2019',
+	it('should return 200 and validate one ticket already registered', () => request.post('/api/v1/tickets/register')
+		.set('Authorization', jwt)
+		.send({
+			date: '13-12-2019',
 			price: '2,6',
-			pdfName: appConfig.controller.registerPdfName,
-		};
-		return ticket.insertOne(ticketAlreadyRegistered)
-			.then(() => request
-				.post('/api/v1/tickets')
-				.set('Authorization', jwt)
-				.attach('file', path.join(__dirname, '..', 'fixtures', 'file-mock.txt'))
-				.expect(200)
-				.then(async response => {
-					expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
-					const tickets = await ticket.find({}).toArray();
-					expect(tickets).to.have.length(4);
-					const validatedTickets = tickets.filter(({ validated }) => validated);
-					expect(validatedTickets).to.have.length(1);
-					expect(validatedTickets[0].pdfName).to.eql('file-mock.txt');
-					expect(validatedTickets[0]).to.have.property('hour');
-				}));
-	});
+		})
+		.expect(200)
+		.then(() => request
+			.post('/api/v1/tickets')
+			.set('Authorization', jwt)
+			.attach('file', path.join(__dirname, '..', 'fixtures', 'file-mock.txt'))
+			.expect(200)
+			.then(async response => {
+				expect(response.headers['content-type']).to.equal('application/json; charset=utf-8');
+				const tickets = await ticket.find({}).toArray();
+				expect(tickets).to.have.length(4);
+				const validatedTickets = tickets.filter(({ validated }) => validated);
+				expect(validatedTickets).to.have.length(1);
+				expect(validatedTickets[0].pdfName).to.eql('file-mock.txt');
+				expect(validatedTickets[0]).to.have.property('hour');
+			})));
 });
