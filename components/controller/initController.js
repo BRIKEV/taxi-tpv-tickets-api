@@ -17,30 +17,30 @@ module.exports = () => {
 
 		const isVerified = authorization => jwt.verifyToken(authorization);
 
+		const updateTicket = pdfName => async ticket => {
+			const dbTicket = await store.getTicket(ticket);
+			await store.upsertTickets({
+				formattedDate: ticket.formattedDate,
+				hour: ticket.hour,
+				price: ticket.price,
+			}, {
+				...ticket,
+				pdfName,
+				validated: !!dbTicket,
+				date: parse(ticket.formattedDate, 'dd-MM-yyyy', new Date()),
+			});
+		};
+
 		const savePDFInfo = async (file, type = 'ibercaja') => {
 			if (!file) throw wrongInput('File is required');
 			const wasRecorded = await store.alreadyRecorded(file.name);
 			if (wasRecorded) throw wrongInput('This File was already recorded');
 			const ibercajaInfo = filePDF.pdfParser(type);
 			logger.info(`Parsing ${file.name} of ${type} type`);
-			const parsedInfo = await ibercajaInfo(file.data, file.name);
-			const tickets = parsedInfo.data.map(ticket => ({
-				...ticket,
-				pdfName: file.name,
-				validated: false,
-			}));
-			const ticketsPromises = tickets.map(ticket => (
-				store.upsertTickets({
-					formattedDate: ticket.formattedDate,
-					hour: ticket.hour,
-					price: ticket.price,
-				}, {
-					...ticket,
-					date: parse(ticket.formattedDate, 'dd-MM-yyyy', new Date()),
-				})
-			));
+			const { data: tickets } = await ibercajaInfo(file.data, file.name);
+			const ticketsPromises = tickets.map(updateTicket(file.name));
 			await Promise.all(ticketsPromises);
-			return parsedInfo.data;
+			return tickets;
 		};
 
 		const getTickets = async () => {

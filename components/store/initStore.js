@@ -3,7 +3,7 @@ const {
 	CustomErrorTypes,
 } = require('error-handler-module');
 
-const wrongInput = errorFactory(CustomErrorTypes.NOT_FOUND);
+const notFound = errorFactory(CustomErrorTypes.NOT_FOUND);
 const crypto = require('../../lib/crypto');
 
 module.exports = () => {
@@ -26,12 +26,22 @@ module.exports = () => {
 			return ticketList;
 		};
 
+		const getTicket = async ({ formattedDate, price }) => {
+			const ticket = await tickets.findOne({
+				formattedDate,
+				price,
+			}, {
+				projection: { _id: 0, formattedDate: 1, price: 1 },
+			});
+			return ticket;
+		};
+
 		const registerTicket = async (date, price) => {
 			const { result } = await tickets.updateOne({
 				formattedDate: date, price,
 			}, { $set: { validated: true } });
 			if (result.nModified !== 1) {
-				throw wrongInput('There was not updated this ticket');
+				throw notFound('There was not updated this ticket');
 			}
 		};
 
@@ -56,6 +66,7 @@ module.exports = () => {
 
 		return {
 			upsertTickets: upsertCollection(tickets),
+			getTicket,
 			alreadyRecorded,
 			getTickets,
 			registerTicket,
