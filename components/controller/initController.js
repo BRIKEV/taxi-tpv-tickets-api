@@ -19,14 +19,16 @@ module.exports = () => {
 
 		const updateTicket = pdfName => async ticket => {
 			const dbTicket = await store.getTicket(ticket);
-			await store.upsertTickets({
+			const ticketExists = !!dbTicket;
+			let query = {
 				formattedDate: ticket.formattedDate,
-				hour: ticket.hour,
 				price: ticket.price,
-			}, {
+			};
+			query = ticketExists ? { ...query, pdfName: config.registerPdfName } : { ...query, hour: ticket.hour };
+			await store.upsertTickets(query, {
 				...ticket,
 				pdfName,
-				validated: !!dbTicket,
+				validated: ticketExists,
 				date: parse(ticket.formattedDate, 'dd-MM-yyyy', new Date()),
 			});
 		};

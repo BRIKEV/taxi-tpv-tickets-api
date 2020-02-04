@@ -5,6 +5,7 @@ module.exports = {
 	},
 	controller: {
 		tokenSecret: process.env.TOKEN_SECRET,
+		registerPdfName: 'Tickets sin pdf',
 	},
 	store: {
 		cryptoSecret: process.env.CRYPTO_SECRET,
