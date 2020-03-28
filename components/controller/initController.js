@@ -92,7 +92,14 @@ module.exports = () => {
 			if (!ticket) {
 				throw notFoundError('Ticket not found');
 			}
-			return ticket;
+			return {
+				id: ticket._id,
+				formattedDate: ticket.formattedDate,
+				pdfName: ticket.pdfName,
+				price: ticket.price,
+				validated: ticket.validated,
+				date: ticket.date,
+			};
 		};
 
 		return {

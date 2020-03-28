@@ -52,7 +52,14 @@ describe('DELETE endpoint', () => {
 					.expect(200);
 			})
 			.then(async ({ body }) => {
-				expect(body).to.eql(expectedTicket);
+				expect(body).to.eql({
+					id: expectedTicket._id,
+					formattedDate: expectedTicket.formattedDate,
+					pdfName: expectedTicket.pdfName,
+					price: expectedTicket.price,
+					validated: expectedTicket.validated,
+					date: expectedTicket.date,
+				});
 				const tickets = await ticket.find({}).toArray();
 				expect(tickets).to.have.length(expectedTickets.length - 1);
 			});

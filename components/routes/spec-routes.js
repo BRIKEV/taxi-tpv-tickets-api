@@ -51,12 +51,3 @@
  * @property {number} statusCode -  <span style="color: gray;font-style: italic">404</span>
  * @property {string} error -  <span style="color: gray;font-style: italic">example: Error description message</span>
  */
-
-/**
- * @typedef DeletedTicket
- * @property {string} _id.required
- * @property {string} formattedDate.required
- * @property {string} hour.required
- * @property {string} price.required
- * @property {boolean} validated
- */

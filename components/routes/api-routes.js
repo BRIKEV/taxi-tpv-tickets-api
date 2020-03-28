@@ -114,7 +114,7 @@ module.exports = () => {
 		 * @route DELETE /api/v1/tickets/:id
 		 * @group Tickets - Everything about tickets
 		 * @param {string} id.path.required
-		 * @returns {DeletedTicket.model} 200 - Successful operation
+		 * @returns {TicketsResponse.model} 200 - Successful operation
 		 * @returns {Error.model} <any> - Error message
 		 * @security JWT
 		*/
