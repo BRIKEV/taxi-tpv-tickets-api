@@ -1,5 +1,5 @@
 const { errorFactory, CustomErrorTypes } = require('error-handler-module');
-const validator = require('swagger-endpoint-validator');
+const expressJSDocSwagger = require('express-jsdoc-swagger');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
@@ -27,13 +27,13 @@ module.exports = () => {
 		app.use(bodyParser.json());
 		app.use(fileUpload());
 
-		validator.init(app, swaggerOptions);
+		expressJSDocSwagger(app)(swaggerOptions);
 
 		/**
-		 * This endpoint serves the manifest
-		 * @route GET /__/manifest
-		 * @group Admin - Everything about admin routes
-		 * @returns 200 - Sucessful response
+		 * GET /__/manifest
+		 * @summary This endpoint serves the manifest
+		 * @tags Admin - Everything about admin routes
+		 * @return {object} 200 - Sucessful response
 		*/
 		app.get('/__/manifest', (req, res) => res.json(manifest));
 

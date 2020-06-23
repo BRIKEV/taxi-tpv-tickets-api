@@ -15,31 +15,26 @@ module.exports = {
 		admin: {
 			whitelist: [process.env.APP_HOST, `https://${process.env.DOCS_HOST}`],
 			swaggerOptions: {
-				swaggerDefinition: {
-					info: {
-						description: 'Documentation for taxi-tpv-tickets-api',
-						title: 'taxi-tpv-tickets-api',
-						version: '1.0.0',
-					},
-					host: process.env.DOCS_HOST || 'localhost:4000',
-					basePath: '/',
-					produces: ['application/json'],
-					schemes: ['https', 'http'],
-					securityDefinitions: {
-						JWT: {
-							type: 'apiKey',
-							in: 'header',
-							name: 'Authorization',
-							description: '',
-						},
+				info: {
+					description: 'Documentation for taxi-tpv-tickets-api',
+					title: 'taxi-tpv-tickets-api',
+					version: '1.0.0',
+					contact: {
+						name: 'Brikev',
+						email: 'hello.brikev@gmail.com',
 					},
 				},
-				basedir: process.cwd(), // app absolute path
-				files: ['./**/**-routes.js'], // path to the API handle folder, related to basedir
-				route: {
-					url: '/api-docs',
-					docs: '/api-docs.json',
+				servers: [],
+				security: {
+					JWT: {
+						type: 'apiKey',
+						in: 'header',
+						name: 'Authorization',
+					},
 				},
+				baseDir: process.cwd(),
+				swaggerUIPath: '/docs/api',
+				filesPattern: './**/**-routes.js',
 			},
 		},
 	},

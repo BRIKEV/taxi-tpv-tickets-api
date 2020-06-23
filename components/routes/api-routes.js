@@ -1,4 +1,3 @@
-const validator = require('swagger-endpoint-validator');
 const {
 	handleHttpError,
 	tagError,
@@ -22,12 +21,12 @@ module.exports = () => {
 			}
 		};
 		/**
-		 * This endpoint allows you to save tickets by uploading pdf files
-		 * @route POST /api/v1/tickets
-		 * @group Tickets - Everything about tickets
-		 * @param {file} file.formData.required - pdf file
-		 * @returns {SuccessPDFResponse.model} 200 - Successful operation
-		 * @returns {Error.model} <any> - Error message
+		 * POST /api/v1/tickets
+		 * @summary This endpoint allows you to save tickets by uploading pdf files
+		 * @tags Tickets - Everything about tickets
+		 * @param {File} request.body.required - PDF files payload - multipart/form-data
+		 * @return {SuccessPDFResponse} 200 - Successful operation
+		 * @return {Error} default - Error message
 		 * @security JWT
 		*/
 		app.post('/api/v1/tickets', authMiddleware, async (req, res, next) => {
@@ -35,7 +34,6 @@ module.exports = () => {
 				const { file } = req.files;
 				const processedInfo = await controller.savePDFInfo(file);
 				const response = { success: true, processedInfo };
-				validator.validateAPIOutput(response, req);
 				return res.json(response);
 			} catch (error) {
 				return next(tagError(error));
@@ -43,17 +41,16 @@ module.exports = () => {
 		});
 
 		/**
-		 * This endpoint allows you retrieve tickets list
-		 * @route GET /api/v1/tickets
-		 * @group Tickets - Everything about tickets
-		 * @returns {Array.<TicketsResponse>} 200 - Successful operation
-		 * @returns {Error.model} <any> - Error message
+		 * GET /api/v1/tickets
+		 * @summary This endpoint allows you retrieve tickets list
+		 * @tags Tickets - Everything about tickets
+		 * @return {Array.<TicketsResponse>} 200 - Successful operation
+		 * @return {Error} default - Error message
 		 * @security JWT
 		*/
 		app.get('/api/v1/tickets', authMiddleware, async (req, res, next) => {
 			try {
 				const tickets = await controller.getTickets();
-				validator.validateAPIOutput(tickets, req);
 				return res.json(tickets);
 			} catch (error) {
 				return next(tagError(error));
@@ -61,12 +58,12 @@ module.exports = () => {
 		});
 
 		/**
-		 * This endpoint allows you to register one ticket in the system
-		 * @route POST /api/v1/tickets/register
-		 * @group Tickets - Everything about tickets
-		 * @param {RegisterTicketRequest.model} body.body.required
-		 * @returns {SuccessTicketRegistered.model} 200 - Successful operation
-		 * @returns {Error.model} <any> - Error message
+		 * POST /api/v1/tickets/register
+		 * @summary This endpoint allows you to register one ticket in the system
+		 * @tags Tickets - Everything about tickets
+		 * @param {RegisterTicketRequest} request.body.required
+		 * @return {SuccessTicketRegistered} 200 - Successful operation
+		 * @return {Error} default - Error message
 		 * @security JWT
 		*/
 		app.post('/api/v1/tickets/register', authMiddleware, async (req, res, next) => {
@@ -89,12 +86,12 @@ module.exports = () => {
 		});
 
 		/**
-		 * This endpoint allows you to login to the API
-		 * @route POST /api/v1/login
-		 * @group User - Everything about user
-		 * @param {LoginRequest.model} body.body.required
-		 * @returns {LoginResponse.model} 200 - Successful operation
-		 * @returns {Error.model} <any> - Error message
+		 * POST /api/v1/login
+		 * @summary This endpoint allows you to login to the API
+		 * @tags User - Everything about user
+		 * @param {LoginRequest} request.body.required
+		 * @return {LoginResponse} 200 - Successful operation
+		 * @return {Error} default - Error message
 		*/
 		app.post('/api/v1/login', async (req, res, next) => {
 			try {
@@ -110,12 +107,12 @@ module.exports = () => {
 		});
 
 		/**
-		 * This endpoint delete one ticket
-		 * @route DELETE /api/v1/tickets/:id
-		 * @group Tickets - Everything about tickets
+		 * DELETE /api/v1/tickets/:id
+		 * @summary This endpoint delete one ticket
+		 * @tags Tickets - Everything about tickets
 		 * @param {string} id.path.required
-		 * @returns {TicketsResponse.model} 200 - Successful operation
-		 * @returns {Error.model} <any> - Error message
+		 * @return {TicketsResponse} 200 - Successful operation
+		 * @return {Error} default - Error message
 		 * @security JWT
 		*/
 		app.delete('/api/v1/tickets/:id', authMiddleware, async (req, res, next) => {
