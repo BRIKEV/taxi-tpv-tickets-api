@@ -41,7 +41,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "error-handler-module": "^1.0.3",
-    "express-fileupload": "^1.1.6",
+    "express-fileupload": "^1.1.8",
     "express-jsdoc-swagger": "^1.0.3",
     "hogan.js": "^3.0.2",
     "jsonwebtoken": "^8.5.1",
