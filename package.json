@@ -31,6 +31,7 @@
     "supertest": "^4.0.2"
   },
   "dependencies": {
+    "@google-cloud/vision": "^2.1.2",
     "body-parser": "^1.19.0",
     "boom": "^7.3.0",
     "bunyan": "^1.8.13",
