@@ -7,38 +7,38 @@ const fileUpload = require('express-fileupload');
 const unauthorizedError = errorFactory(CustomErrorTypes.UNAUTHORIZED);
 
 module.exports = () => {
-	const start = async ({
-		manifest = {}, app, config, logger,
-	}) => {
-		const { swaggerOptions } = config;
+  const start = async ({
+    manifest = {}, app, config, logger,
+  }) => {
+    const { swaggerOptions } = config;
 
-		const { whitelist } = config;
-		const corsOptions = {
-			origin: (origin, callback) => {
-				if (whitelist.indexOf(origin) !== -1 || !origin) {
-					return callback(null, true);
-				}
-				logger.error(`CORS error for this origin ${origin}`);
-				return callback(unauthorizedError('Not allowed by CORS'));
-			},
-		};
-		app.use(cors(corsOptions));
-		app.use(bodyParser.urlencoded({ extended: true }));
-		app.use(bodyParser.json());
-		app.use(fileUpload());
+    const { whitelist } = config;
+    const corsOptions = {
+      origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+          return callback(null, true);
+        }
+        logger.error(`CORS error for this origin ${origin}`);
+        return callback(unauthorizedError('Not allowed by CORS'));
+      },
+    };
+    app.use(cors(corsOptions));
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(fileUpload());
 
-		expressJSDocSwagger(app)(swaggerOptions);
+    expressJSDocSwagger(app)(swaggerOptions);
 
-		/**
-		 * GET /__/manifest
-		 * @summary This endpoint serves the manifest
-		 * @tags Admin - Everything about admin routes
-		 * @return {object} 200 - Sucessful response
-		*/
-		app.get('/__/manifest', (req, res) => res.json(manifest));
+    /**
+     * GET /__/manifest
+     * @summary This endpoint serves the manifest
+     * @tags Admin - Everything about admin routes
+     * @return {object} 200 - Sucessful response
+    */
+    app.get('/__/manifest', (req, res) => res.json(manifest));
 
-		return Promise.resolve();
-	};
+    return Promise.resolve();
+  };
 
-	return { start };
+  return { start };
 };

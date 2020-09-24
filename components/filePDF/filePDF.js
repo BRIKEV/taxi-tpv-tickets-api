@@ -2,11 +2,11 @@
 const pdfParser = require('../../lib/pdfParser');
 
 module.exports = () => {
-	const start = async () => (
-		Promise.resolve({
-			pdfParser,
-		})
-	);
+  const start = async () => (
+    Promise.resolve({
+      pdfParser,
+    })
+  );
 
-	return { start };
+  return { start };
 };

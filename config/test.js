@@ -1,3 +1,3 @@
 module.exports = {
-	logger: { transport: null },
+  logger: { transport: null },
 };
