@@ -41,6 +41,31 @@ module.exports = () => {
     });
 
     /**
+     * POST /api/v1/ticket/ocr
+     * @summary This endpoint allows you to retrieve the value of a ticket
+     * @tags Tickets - Everything about tickets
+     * @param {FileImage} request.body.required - PDF files payload - multipart/form-data
+     * @return {SuccessTicketImage} 200 - Successful operation
+     * @return {Error} default - Error message
+     * @security JWT
+    */
+    app.post('/api/v1/ticket/ocr', authMiddleware, async (req, res, next) => {
+      try {
+        if (!req.files) {
+          throw wrongInput('You have to provide a valid file');
+        }
+        const { ticket } = req.files;
+        if (!ticket) {
+          throw wrongInput('Ticket is the only allowed file');
+        }
+        const processedInfo = await controller.ocrImage(ticket);
+        return res.json(processedInfo);
+      } catch (error) {
+        return next(tagError(error));
+      }
+    });
+
+    /**
      * GET /api/v1/tickets
      * @summary This endpoint allows you retrieve tickets list
      * @tags Tickets - Everything about tickets

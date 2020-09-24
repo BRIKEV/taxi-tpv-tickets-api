@@ -4,15 +4,21 @@ const {
 } = require('error-handler-module');
 const parse = require('date-fns/parse');
 
+const {
+  mapDate,
+  mapPrice,
+  dateIsIncluded,
+  priceIsIncluded,
+} = require('../../lib/imageOCR');
+const token = require('../../lib/token');
+
 const wrongInput = errorFactory(CustomErrorTypes.WRONG_INPUT);
 const forbiddenError = errorFactory(CustomErrorTypes.FORBIDDEN);
 const notFoundError = errorFactory(CustomErrorTypes.NOT_FOUND);
 
-const token = require('../../lib/token');
-
 module.exports = () => {
   const start = async ({
-    logger, filePDF, store, config,
+    logger, filePDF, store, config, ocr,
   }) => {
     const jwt = token(config.tokenSecret);
 
@@ -102,6 +108,20 @@ module.exports = () => {
       };
     };
 
+    const ocrImage = async file => {
+      logger.info(`OCR file ${file.name}`);
+      const texts = await ocr.textDetection(file.data);
+      logger.info('Text detected');
+      const [date] = texts.filter(dateIsIncluded).map(mapDate);
+      const [price] = texts.filter(priceIsIncluded).map(mapPrice);
+      logger.info(`Returning date ${date} and price ${price}`);
+      const [day, month, year] = date.split('.');
+      // we append 20 to the year
+      // so this code won't work on 2100s
+      const formattedDate = `${day}-${month}-20${year}`;
+      return { date: formattedDate, price };
+    };
+
     return {
       savePDFInfo,
       getTickets,
@@ -109,6 +129,7 @@ module.exports = () => {
       login,
       isVerified,
       deleteTicket,
+      ocrImage,
     };
   };
 

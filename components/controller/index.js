@@ -4,4 +4,4 @@ const controller = require('./initController');
 
 module.exports = new System({ name: 'controller' })
   .add('controller', controller())
-  .dependsOn('logger', 'store', 'filePDF', 'config');
+  .dependsOn('logger', 'store', 'filePDF', 'config', 'ocr');
