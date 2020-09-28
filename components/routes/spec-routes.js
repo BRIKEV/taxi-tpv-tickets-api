@@ -12,6 +12,17 @@
  */
 
 /**
+ * @typedef {object} FileImage
+ * @property {string} ticket.required - ticket image - binary
+ */
+
+/**
+ * @typedef {object} SuccessTicketImage
+ * @property {number} price.required
+ * @property {string} date.required
+ */
+
+/**
  * @typedef {object} TicketsResponse
  * @property {string} id.required
  * @property {string} formattedDate.required
