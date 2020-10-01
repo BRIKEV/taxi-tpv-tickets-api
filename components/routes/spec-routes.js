@@ -18,7 +18,7 @@
 
 /**
  * @typedef {object} SuccessTicketImage
- * @property {number} price.required
+ * @property {string} price.required
  * @property {string} date.required
  */
 
