@@ -36,7 +36,7 @@
     "boom": "^7.3.0",
     "bunyan": "^1.8.13",
     "chalk": "^3.0.0",
-    "confabulous": "^1.7.0",
+    "confabulous": "^2.0.2",
     "cors": "^2.8.5",
     "date-fns": "^2.13.0",
     "debug": "^4.1.1",
