@@ -52,7 +52,7 @@
     "optimist": "^0.6.1",
     "optional": "^0.1.4",
     "pdf-parse": "^1.1.1",
-    "prepper": "^1.2.0",
+    "prepper": "^1.2.1",
     "ramda": "^0.27.0",
     "snyk": "^1.425.4",
     "swagger-endpoint-validator": "^1.1.5",
