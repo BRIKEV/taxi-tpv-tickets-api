@@ -13,6 +13,7 @@ describe('Register ticket', () => {
   let ticket;
   let usersCollection;
   let appConfig;
+  let storeSystem;
   before(async () => {
     const {
       app, mongo, store, config,
@@ -21,13 +22,14 @@ describe('Register ticket', () => {
     request = supertest(app);
     ticket = mongo.collection('tickets');
     usersCollection = mongo.collection('users');
-    const userToken = await getAuthToken(request, store);
-    jwt = userToken;
+    storeSystem = store;
   });
 
   beforeEach(async () => {
     await ticket.deleteMany({});
     await usersCollection.deleteMany({});
+    const userToken = await getAuthToken(request, storeSystem);
+    jwt = userToken;
   });
 
   afterEach(async () => {
