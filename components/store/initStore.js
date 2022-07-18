@@ -60,11 +60,14 @@ module.exports = () => {
       return { ...user, password: normalPassword };
     };
 
+    const getUserById = async id => users.findOne({ _id: createObjectID(id) });
+
     const registerUser = async user => {
       const { crypted, salt } = encrypt(user.password);
       const payload = {
         name: user.name,
         email: user.email,
+        dni: user.dni,
         password: crypted,
         salt,
       };
@@ -78,6 +81,7 @@ module.exports = () => {
     };
 
     return {
+      getUserById,
       upsertTickets: upsertCollection(tickets),
       getTicket,
       alreadyRecorded,
