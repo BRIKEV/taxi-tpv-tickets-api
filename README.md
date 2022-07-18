@@ -39,6 +39,16 @@ npm run load
 npm run test
 ```
 
+You at least need this ENV variables.
+
+```
+CRYPTO_SECRET=circlecitestcirclecitestcircleci
+CRYPTO_ALGORITHM=aes-192-cbc
+TOKEN_SECRET=circlesecret
+SERVICE_ENV=ci
+DB_CONNECTION_STRING=mongodb://node:node@localhost:27017/tpv-tickets
+```
+
 ## How to contribute
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.

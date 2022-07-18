@@ -13,18 +13,20 @@ describe('Upload endpoints', () => {
   let ticket;
   let jwt;
   let usersCollection;
+  let storeSystem;
   before(async () => {
     const { app, mongo, store } = await sys.start();
     request = supertest(app);
     ticket = mongo.collection('tickets');
     usersCollection = mongo.collection('users');
-    const userToken = await getAuthToken(request, store);
-    jwt = userToken;
+    storeSystem = store;
   });
 
   beforeEach(async () => {
     await ticket.deleteMany({});
     await usersCollection.deleteMany({});
+    const userToken = await getAuthToken(request, storeSystem);
+    jwt = userToken;
   });
 
   afterEach(async () => {
@@ -46,7 +48,7 @@ describe('Upload endpoints', () => {
         expect(ticketItem).to.have.property('validated');
         expect(ticketItem.validated).to.eql(false);
         expect(ticketItem).to.have.property('pdfName');
-        expect(ticketItem.pdfName).to.eql('file-mock.txt');
+        expect(ticketItem.pdfName).to.eql('12345678_24-dic.-2019_Extractodecomercio.pdf');
         expect(ticketItem).to.have.property('price');
         expect(ticketItem).to.have.property('hour');
         expect(ticketItem).to.have.property('formattedDate');
@@ -82,7 +84,7 @@ describe('Upload endpoints', () => {
         expect(tickets).to.have.length(5);
         const validatedTickets = tickets.filter(({ validated }) => validated);
         expect(validatedTickets).to.have.length(1);
-        expect(validatedTickets[0].pdfName).to.eql('file-mock.txt');
+        expect(validatedTickets[0].pdfName).to.eql('12345678_24-dic.-2019_Extractodecomercio.pdf');
         expect(validatedTickets[0]).to.have.property('hour');
       })));
 });

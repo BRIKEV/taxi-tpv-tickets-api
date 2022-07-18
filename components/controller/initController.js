@@ -40,14 +40,18 @@ module.exports = () => {
       });
     };
 
-    const savePDFInfo = async (file, type = 'ibercaja') => {
+    const savePDFInfo = async (file, userId, type = 'ibercaja') => {
+      const user = await store.getUserById(userId);
+      if (!user) throw notFoundError('User does not exists');
       if (!file) throw wrongInput('File is required');
-      const wasRecorded = await store.alreadyRecorded(file.name);
-      if (wasRecorded) throw wrongInput('This File was already recorded');
-      const ibercajaInfo = filePDF.pdfParser(type);
+      const pdfParser = filePDF.pdfParser(type);
       logger.info(`Parsing ${file.name} of ${type} type`);
-      const { data: tickets } = await ibercajaInfo(file.data, file.name);
-      const ticketsPromises = tickets.map(updateTicket(file.name));
+      const { data: tickets, name: parsedFileName } = await pdfParser(file.data);
+      const onlyDNINumbers = user.dni.slice(0, -1);
+      const fileName = `${onlyDNINumbers}_${parsedFileName}`;
+      const wasRecorded = await store.alreadyRecorded(fileName);
+      if (wasRecorded) throw wrongInput('This File was already recorded');
+      const ticketsPromises = tickets.map(updateTicket(fileName));
       await Promise.all(ticketsPromises);
       return tickets;
     };
