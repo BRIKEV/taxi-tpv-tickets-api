@@ -34,7 +34,7 @@ describe('Upload endpoints', () => {
 
   after(() => sys.stop());
 
-  it('should save pdf mocked data in mongodb', () => request
+  it.only('should save pdf mocked data in mongodb', () => request
     .post('/api/v1/tickets')
     .set('Authorization', jwt)
     .attach('file', path.join(__dirname, '..', 'fixtures', 'file-mock.txt'))
@@ -46,7 +46,7 @@ describe('Upload endpoints', () => {
         expect(ticketItem).to.have.property('validated');
         expect(ticketItem.validated).to.eql(false);
         expect(ticketItem).to.have.property('pdfName');
-        expect(ticketItem.pdfName).to.eql('file-mock.txt');
+        expect(ticketItem.pdfName).to.eql('userdni_24-dic.-2019_Extractodecomercio.pdf');
         expect(ticketItem).to.have.property('price');
         expect(ticketItem).to.have.property('hour');
         expect(ticketItem).to.have.property('formattedDate');

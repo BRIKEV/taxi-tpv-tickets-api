@@ -14,7 +14,8 @@ module.exports = () => {
     const authMiddleware = (req, res, next) => {
       const { authorization } = req.headers;
       try {
-        controller.isVerified(authorization);
+        const { id: userId } = controller.isVerified(authorization);
+        res.locals.userId = userId;
         return next();
       } catch (error) {
         return next(tagError(error));
@@ -32,7 +33,8 @@ module.exports = () => {
     app.post('/api/v1/tickets', authMiddleware, async (req, res, next) => {
       try {
         const { file } = req.files;
-        const processedInfo = await controller.savePDFInfo(file);
+        const { userId } = res.locals;
+        const processedInfo = await controller.savePDFInfo(file, userId);
         const response = { success: true, processedInfo };
         return res.json(response);
       } catch (error) {
