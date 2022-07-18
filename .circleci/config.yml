@@ -8,8 +8,8 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:10.15.0
-      - image: mongo:4.0.1
+      - image: circleci/node:16.15.1
+      - image: mongo:5.0
         port: 27017:27017
     steps:
       - checkout
