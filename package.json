@@ -8,6 +8,7 @@
     "start": "node index.js",
     "test-ci": "cross-env SERVICE_ENV=ci mocha --reporter mocha-junit-reporter --timeout 5000 --exit",
     "test": "cross-env SERVICE_ENV=test mocha --reporter spec './test/**/*.test.js' --timeout 5000 --exit",
+    "build": "echo 'No need for a build process'",
     "lint": "eslint .",
     "load": "DEBUG=* node db/loadData.js",
     "manifest": "node_modules/make-manifest/bin/make-manifest",
