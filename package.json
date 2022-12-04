@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@google-cloud/vision": "^2.1.2",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.19.2",
     "boom": "^7.3.0",
     "bunyan": "^1.8.13",
     "chalk": "^3.0.0",
